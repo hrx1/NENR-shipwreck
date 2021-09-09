@@ -1,5 +1,6 @@
 package fer.nenr.fuzzycontrol.rule;
 
+import fer.nenr.brodolom.IConclusionMachine;
 import fer.nenr.sets.fuzzy.IFuzzySet;
 import fer.nenr.util.ArgumentUtils;
 
@@ -11,6 +12,7 @@ public class RuleBuilder {
 
     private DoubleBinaryOperator tNorm;
     private DoubleBinaryOperator sNorm;
+    private DoubleBinaryOperator implicationOperator;
 
     private LinkedList<DoubleBinaryOperator> stNorms = new LinkedList<>();
     private LinkedList<BoatPremise> premises = new LinkedList<>();
@@ -19,12 +21,16 @@ public class RuleBuilder {
 
     private RuleBuilder() {}
 
-    public static RuleBuilder of(DoubleBinaryOperator tNorm, DoubleBinaryOperator sNorm, BoatPremise fuzzySet) {
-        ArgumentUtils.requireNonNull(tNorm, sNorm);
+    public static RuleBuilder of(
+            IConclusionMachine conclusionMachine,
+            BoatPremise fuzzySet) {
+
+        ArgumentUtils.requireNonNull(conclusionMachine);
 
         RuleBuilder ruleBuilder = new RuleBuilder();
-        ruleBuilder.sNorm = sNorm;
-        ruleBuilder.tNorm = tNorm;
+        ruleBuilder.sNorm = conclusionMachine.sNorm();
+        ruleBuilder.tNorm = conclusionMachine.tNorm();
+        ruleBuilder.implicationOperator = conclusionMachine.implicationOperator();
 
         ruleBuilder.premises.add(fuzzySet);
 //        ruleBuilder.parameterChoosers.add(parameter);
@@ -59,7 +65,8 @@ public class RuleBuilder {
         Rule result = new Rule(
                 new ArrayList<>(premises),
                 new ArrayList<>(stNorms),
-                implies
+                implies,
+                implicationOperator
         );
 
         return result;

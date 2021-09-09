@@ -17,17 +17,20 @@ public class Rule {
 
     private ArrayList<BoatPremise> premises;
 
-    Rule(ArrayList<BoatPremise> premises, ArrayList<DoubleBinaryOperator> stNorms, IFuzzySet implies) {
+    private DoubleBinaryOperator implicationOperator;
+
+    Rule(ArrayList<BoatPremise> premises, ArrayList<DoubleBinaryOperator> stNorms, IFuzzySet implies, DoubleBinaryOperator implicationOperator) {
         this.premises = premises;
         this.stNorms = stNorms;
         this.implies = implies;
+        this.implicationOperator = implicationOperator;
     }
 
     public IFuzzySet apply(int L, int D, int LK, int DK, int V, int S) {
         double relationValue = premises.get(0).getValue(L, D, LK, DK, V, S);
 
         for (int i = 1; i < premises.size(); i++) {
-            double currentValue = premises.get(0).getValue(L, D, LK, DK, V, S);
+            double currentValue = premises.get(i).getValue(L, D, LK, DK, V, S);
             DoubleBinaryOperator stNorm = stNorms.get(i-1);
             relationValue = stNorm.applyAsDouble(relationValue, currentValue);
         }
@@ -35,7 +38,7 @@ public class Rule {
         MutableFuzzySet resultSet = new MutableFuzzySet(implies.getDomain());
         for(DomainElement yDomainElement : implies.getDomain()) {
              double yValue = implies.getValueFor(yDomainElement);
-             yValue = Math.min(relationValue, yValue);
+             yValue = implicationOperator.applyAsDouble(relationValue, yValue);
              resultSet.set(yDomainElement, yValue);
         }
 

@@ -10,13 +10,16 @@ import java.util.function.IntToDoubleFunction;
 import static fer.nenr.sets.fuzzy.StandardFuzzySets.*;
 
 public enum BoatPremise implements IFuzzySet {
-    NEAR_LK(BoatDomain.premiseDomain, lFunction(30, 100), ParameterChooser.LK),
-    NEAR_DK(BoatDomain.premiseDomain, lFunction(30, 100), ParameterChooser.DK),
-    GOING_FAST(BoatDomain.premiseDomain, gammaFunction(1, 5),ParameterChooser.V),
+    NEAR_LK(BoatDomain.premiseDomain, lFunction(40, 50), ParameterChooser.LK),
+    NEAR_DK(BoatDomain.premiseDomain, lFunction(40, 50), ParameterChooser.DK),
+    GOING_FAST(BoatDomain.speed, gammaFunction(50, 70),ParameterChooser.V),
 
-    FAR_LK(BoatDomain.premiseDomain, gammaFunction(70, 300), ParameterChooser.LK),
-    FAR_DK(BoatDomain.premiseDomain, gammaFunction(70, 300), ParameterChooser.DK),
-    GOING_SLOW(BoatDomain.premiseDomain, lFunction(10, 30), ParameterChooser.V);
+    FAR_LK(BoatDomain.premiseDomain, gammaFunction(60, 70), ParameterChooser.LK),
+    FAR_DK(BoatDomain.premiseDomain, gammaFunction(60, 70), ParameterChooser.DK),
+    GOING_SLOW(BoatDomain.speed, lFunction(20, 60), ParameterChooser.V),
+
+    FAR_L(BoatDomain.premiseDomain, gammaFunction(50, 70), ParameterChooser.L),
+    FAR_D(BoatDomain.premiseDomain, gammaFunction(50, 70), ParameterChooser.D);
 
     private IFuzzySet fuzzySet;
     private ParameterChooser parameterChooser;
